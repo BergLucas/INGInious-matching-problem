@@ -299,7 +299,7 @@ class MatchingDisplayableProblem(MatchingProblem, DisplayableProblem):  # type: 
         Returns:
             The rendered input HTML.
         """
-        answers = [question["answer"] for question in self._questions]
+        answers = list({question["answer"] for question in self._questions})
 
         if not self._unshuffle:
             Random("{}#{}#{}".format(self.get_id(), language, seed)).shuffle(answers)  # noqa: S311
