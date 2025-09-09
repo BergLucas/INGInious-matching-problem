@@ -6,7 +6,8 @@
         for="{{pid}}_{{loop.index0}}">
         {{ display(question['question']) | safe }}
     </label>
-    <select class="form-control col-6" name="{{pid}}" id="{{pid}}_{{loop.index0}}">
+    <select class="form-control col-6" name="{{pid}}" id="{{pid}}_{{loop.index0}}" required>
+        <option value="" selected>{{ _("Choose...") }}</option>
         {% for answer in answers %}
         <option value="{{answer_hash(answer)}}">{{ answer }}</option>
         {% endfor %}
