@@ -68,6 +68,11 @@ class MatchingProblem(Problem):
         if "questions" not in content:
             raise Exception(f"Problem {problemid} requires a questions field")
 
+        if len(content["questions"]) < MIN_QUESTION_NUMBER:
+            raise Exception(
+                f"Problem {problemid} requires at least {MIN_QUESTION_NUMBER} questions"
+            )
+
         super().__init__(problemid, content, translations, taskfs)
         self._header = content.get("header", "")
         self._unshuffle = content.get("unshuffle", False)
@@ -82,11 +87,6 @@ class MatchingProblem(Problem):
         ):
             raise Exception(
                 f"All non-empty questions in problem {problemid} must be different"
-            )
-
-        if len(content["questions"]) < MIN_QUESTION_NUMBER:
-            raise Exception(
-                f"Problem {problemid} requires at least {MIN_QUESTION_NUMBER} non-empty questions"  # noqa: E501
             )
 
     @property
