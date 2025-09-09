@@ -1,0 +1,15 @@
+<div id="task_alert_{{pid}}" class="task_alert_problem"></div>
+{{ header | safe }}
+{% for question in questions %}
+<div class="form-group row d-flex mb-2">
+    <label class="control-label col-6 d-flex align-items-center label-p-no-margin-bottom mb-0"
+        for="{{pid}}_{{loop.index0}}">
+        {{ display(question['question']) | safe }}
+    </label>
+    <select class="form-control col-6" name="{{pid}}" id="{{pid}}_{{loop.index0}}">
+        {% for answer in answers %}
+        <option value="{{answer_hash(answer)}}">{{ answer }}</option>
+        {% endfor %}
+    </select>
+</div>
+{% endfor %}

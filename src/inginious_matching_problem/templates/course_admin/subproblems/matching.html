@@ -1,0 +1,57 @@
+<div class="form-group row">
+    <label for="header-PID" class="col-sm-2 control-label">{{ _("Context") }}</label>
+    <div class="col-sm-10">
+        <textarea id="header-PID" class="form-control" name="problem[PID][header]"></textarea>
+    </div>
+</div>
+<div class="form-group row">
+    <label for="unshuffle-PID" class="col-sm-2 control-label">{{ _("Unshuffle answers") }}</label>
+    <div class="col-sm-10">
+        <div class="checkbox"><label>
+            <input type="checkbox" id="unshuffle-PID" name="problem[PID][unshuffle]"/>&nbsp;
+        </label></div>
+    </div>
+</div>
+<div class="form-group row">
+    <label for="centralize-PID" class="col-sm-2 control-label">{{ _("Count error only at top of the page?") }}</label>
+    <div class="col-sm-10">
+        <div class="checkbox"><label>
+            <input type="checkbox" id="centralize-PID" name="problem[PID][centralize]"/>&nbsp;
+        </label></div>
+    </div>
+</div>
+<div class="form-group row">
+    <label for="all_success_feedback-PID" class="col-sm-2 control-label">All success feedback message</label>
+
+    <div class="col-sm-10">
+        <textarea id="all_success_feedback-PID" class="form-control" name="problem[PID][all_success_feedback]"
+                  placeholder="An optional all success feedback message"></textarea>
+    </div>
+</div>
+<div class="form-group row">
+    <label for="partial_success_feedback-PID" class="col-sm-2 control-label">Partial success feedback message</label>
+
+    <div class="col-sm-10">
+        <textarea id="partial_success_feedback-PID" class="form-control" name="problem[PID][partial_success_feedback]"
+                  placeholder="An optional partial success feedback message"></textarea>
+    </div>
+</div>
+<div class="form-group row">
+    <label for="all_error_feedback-PID" class="col-sm-2 control-label">All error feedback message</label>
+
+    <div class="col-sm-10">
+        <textarea id="all_error_feedback-PID" class="form-control" name="problem[PID][all_error_feedback]"
+                  placeholder="An optional all error feedback message"></textarea>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-12">
+        <h4 style="text-align: center">Questions</h4>
+        <div id="questions-PID" class="mb-3">
+
+        </div>
+        <button class="btn btn-info btn-sm btn-block" type="button" onclick="studio_create_matching_question('PID', {})">
+            <i class="fa fa-plus"></i>Add new question
+        </button>
+        </div>
+</div>

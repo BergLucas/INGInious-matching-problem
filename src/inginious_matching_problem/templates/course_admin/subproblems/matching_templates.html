@@ -1,0 +1,50 @@
+<div id="subproblem_{{key}}_questions" style="display:none;">
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group row">
+                <label for="question-PID-QUESTION" class="col-sm-2 control-label">Question</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control subproblem_{{key}}_question" name="problem[PID][questions][QUESTION][question]"
+                        placeholder="The question" id="question-PID-QUESTION"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="answer-PID-QUESTION" class="col-sm-2 control-label">Answer</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control subproblem_{{key}}_answer" name="problem[PID][questions][QUESTION][answer]"
+                        placeholder="The answer" id="answer-PID-QUESTION"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="success_feedback-PID-QUESTION" class="col-sm-2 control-label">
+                    Success feedback message (displayed when the answer is valid)
+                </label>
+
+                <div class="col-sm-10">
+                    <textarea class="form-control subproblem_{{key}}_success_feedback"
+                        name="problem[PID][questions][QUESTION][success_feedback]" placeholder="{{ _('An optional success feedback message') }}"
+                        id="success_feedback-PID-QUESTION">
+                    </textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="error_feedback-PID-QUESTION" class="col-sm-2 control-label">
+                    Error feedback message (displayed when the answer is invalid)
+                </label>
+
+                <div class="col-sm-10">
+                    <textarea class="form-control subproblem_{{key}}_error_feedback"
+                        name="problem[PID][questions][QUESTION][error_feedback]" placeholder="{{ _('An optional error feedback message') }}"
+                        id="error_feedback-PID-QUESTION">
+                    </textarea>
+                </div>
+            </div>
+            <div class="row">
+                <button class="btn btn-danger btn-sm btn-block" type="button"
+                    onclick="studio_delete_matching_question('PID', QUESTION)">
+                    <i class="fa fa-remove"></i> {{ _("Delete") }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
