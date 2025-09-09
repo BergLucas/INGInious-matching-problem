@@ -68,16 +68,6 @@ class MatchingProblem(Problem):
         if "questions" not in content:
             raise Exception(f"Problem {problemid} requires a questions field")
 
-        if len({question["question"] for question in content["questions"]}) != len(
-            content["questions"]
-        ):
-            raise Exception(f"All questions in problem {problemid} must be different")
-
-        if len(content["questions"]) < MIN_QUESTION_NUMBER:
-            raise Exception(
-                f"Problem {problemid} requires at least {MIN_QUESTION_NUMBER} questions"
-            )
-
         super().__init__(problemid, content, translations, taskfs)
         self._header = content.get("header", "")
         self._unshuffle = content.get("unshuffle", False)
@@ -85,7 +75,32 @@ class MatchingProblem(Problem):
         self._all_success_feedback = content.get("all_success_feedback")
         self._partial_success_feedback = content.get("partial_success_feedback")
         self._all_error_feedback = content.get("all_error_feedback")
-        self._questions: list[dict] = list(content["questions"])
+        self._questions: list[dict] = content["questions"]
+
+        if len({question["question"] for question in self.non_empty_questions}) != len(
+            self.non_empty_questions
+        ):
+            raise Exception(
+                f"All non-empty questions in problem {problemid} must be different"
+            )
+
+        if len(content["questions"]) < MIN_QUESTION_NUMBER:
+            raise Exception(
+                f"Problem {problemid} requires at least {MIN_QUESTION_NUMBER} non-empty questions"  # noqa: E501
+            )
+
+    @property
+    def non_empty_questions(self) -> list[dict]:
+        """Gets the list of non empty questions.
+
+        Returns:
+            The list of non empty questions.
+        """
+        return [
+            question
+            for question in self._questions
+            if "question" in question and question["question"]
+        ]
 
     @classmethod
     def get_type(cls) -> str:  # type: ignore
@@ -116,8 +131,10 @@ class MatchingProblem(Problem):
         answer_hashes = {
             self.get_answer_hash(question["answer"]) for question in self._questions
         }
-        return pid in task_input and all(
-            answer_hash in answer_hashes for answer_hash in task_input[pid]
+        return (
+            pid in task_input
+            and len(task_input[pid]) == len(self.non_empty_questions)
+            and all(answer_hash in answer_hashes for answer_hash in task_input[pid])
         )
 
     def get_answer_hash(self, answer: str) -> str:
@@ -147,23 +164,25 @@ class MatchingProblem(Problem):
         feedbacks: list[str] = []
         invalid_count = 0
 
+        non_empty_questions = self.non_empty_questions
+
         question_ids: dict[str, set[int]] = defaultdict(set)
-        for i, question in enumerate(self._questions):
+        for i, question in enumerate(non_empty_questions):
             question_ids[self.get_answer_hash(question["answer"])].add(i)
 
         for i, answer_hash in enumerate(task_input[self.get_id()]):
             if i in question_ids[answer_hash]:
-                if "success_feedback" in self._questions[i]:
-                    feedbacks.append(self._questions[i]["success_feedback"])
+                if "success_feedback" in non_empty_questions[i]:
+                    feedbacks.append(non_empty_questions[i]["success_feedback"])
             else:
                 invalid_count += 1
-                if "error_feedback" in self._questions[i]:
-                    feedbacks.append(self._questions[i]["error_feedback"])
+                if "error_feedback" in non_empty_questions[i]:
+                    feedbacks.append(non_empty_questions[i]["error_feedback"])
 
         if invalid_count == 0:
             global_message = self._all_success_feedback
             valid = True
-        elif invalid_count < len(self._questions):
+        elif invalid_count < len(non_empty_questions):
             global_message = self._partial_success_feedback
             valid = False
         else:
@@ -314,7 +333,7 @@ class MatchingDisplayableProblem(MatchingProblem, DisplayableProblem):  # type: 
             template_folder=PATH_TO_TEMPLATES,
             pid=self.get_id(),
             header=header,
-            questions=self._questions,
+            questions=self.non_empty_questions,
             answers=answers,
             answer_hash=self.get_answer_hash,
             display=lambda text: ParsableText(
