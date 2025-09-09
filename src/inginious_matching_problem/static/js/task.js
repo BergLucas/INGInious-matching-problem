@@ -3,7 +3,9 @@ function load_feedback_matching(key, content) {
 }
 
 function load_input_matching(submissionid, key, input) {
-  var field = $(".problem input[name='" + key + "']");
-  if (key in input) $(field).prop("value", input[key]);
-  else $(field).prop("value", "");
+  if (key in input) {
+    for (const [i, value] of input[key].entries()) {
+      $(".problem select[id='" + key + "_" + i + "']").val(value);
+    }
+  }
 }
