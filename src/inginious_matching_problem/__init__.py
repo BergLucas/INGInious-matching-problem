@@ -153,10 +153,12 @@ class MatchingProblem(Problem):
 
         for i, answer_hash in enumerate(task_input[self.get_id()]):
             if i in question_ids[answer_hash]:
-                feedbacks.append(self._questions[i]["success_feedback"])
+                if "success_feedback" in self._questions[i]:
+                    feedbacks.append(self._questions[i]["success_feedback"])
             else:
                 invalid_count += 1
-                feedbacks.append(self._questions[i]["error_feedback"])
+                if "error_feedback" in self._questions[i]:
+                    feedbacks.append(self._questions[i]["error_feedback"])
 
         if invalid_count == 0:
             global_message = self._all_success_feedback
